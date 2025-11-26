@@ -41,16 +41,18 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="93" max="32767" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace min="-2" pref="237" max="-2" attributes="0"/>
                   <Component id="btnLimpiar" min="-2" pref="137" max="-2" attributes="0"/>
-                  <EmptySpace pref="244" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="114" max="-2" attributes="0"/>
                   <Component id="btnGuardar" min="-2" pref="137" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="249" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="108" max="-2" attributes="0"/>
+                  <Component id="btnVolver" min="-2" pref="135" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
@@ -61,7 +63,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -74,12 +76,13 @@
                           <Component id="jLabel2" min="-2" pref="419" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="60" max="32767" attributes="0"/>
+                  <EmptySpace pref="61" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnGuardar" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
                       <Component id="btnLimpiar" alignment="3" min="-2" pref="58" max="-2" attributes="0"/>
+                      <Component id="btnVolver" alignment="3" min="-2" pref="59" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -126,7 +129,6 @@
                                       <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="txtNombre" min="-2" pref="289" max="-2" attributes="0"/>
-                                          <Component id="jTextField3" min="-2" pref="289" max="-2" attributes="0"/>
                                           <Component id="txtColor" alignment="0" min="-2" pref="289" max="-2" attributes="0"/>
                                           <Component id="txtRaza" min="-2" pref="289" max="-2" attributes="0"/>
                                       </Group>
@@ -153,11 +155,8 @@
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField3" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtRaza" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
@@ -248,8 +247,6 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtColor">
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField3">
-            </Component>
             <Component class="javax.swing.JTextField" name="txtRaza">
             </Component>
             <Component class="javax.swing.JTextField" name="txtCelDuenio">
@@ -339,6 +336,20 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLimpiarActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnVolver">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Liberation Sans" size="18" style="0"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="2" name="/home/pabloszuban/Im&#xe1;genes/Capturas de pantalla/volverinicio.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Volver"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVolverActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
