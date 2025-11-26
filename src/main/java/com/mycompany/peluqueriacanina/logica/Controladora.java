@@ -59,7 +59,7 @@ public class Controladora {
 
     }
 
-    public void modificarMAscota(Mascota masco, String nombreMasco, String raza, String color, String observaciones,
+    public void modificarMascota(Mascota masco, String nombreMasco, String raza, String color, String observaciones,
             String alergico, String atEsp, String nombreDuenio, String celDuenio) {
         // al masco viejo que me llega le setteo los nuevos parametros que llegan con
         // el.
