@@ -2,8 +2,14 @@
 package com.mycompany.peluqueriacanina.igu;
 
 import com.mycompany.peluqueriacanina.logica.Controladora;
+import com.mycompany.peluqueriacanina.logica.Duenio;
 import javax.swing.JDialog;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
 
 public class CargaDatos extends javax.swing.JFrame {
 
@@ -13,9 +19,194 @@ public class CargaDatos extends javax.swing.JFrame {
     // instancio a controladora logica
     Controladora control = null;
 
+    // Variables para autocompletado
+    private JPopupMenu popupSugerencias;
+
     public CargaDatos() {
         control = new Controladora();
         initComponents();
+        configurarAutocompletado();
+    }
+
+    private void configurarAutocompletado() {
+        // Inicializar popup de sugerencias
+        popupSugerencias = new JPopupMenu();
+
+        // Agregar listener al campo de nombre del dueño
+        txtNomDuenio.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String texto = txtNomDuenio.getText().trim();
+
+                // Solo mostrar sugerencias si hay al menos 2 caracteres
+                if (texto.length() >= 2) {
+                    // Usar un timer para dar tiempo a seguir escribiendo
+                    javax.swing.Timer timer = new javax.swing.Timer(500, evt -> {
+                        mostrarSugerenciasDuenios(texto);
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+                } else {
+                    popupSugerencias.setVisible(false);
+                }
+            }
+        });
+
+        // Ocultar popup cuando se pierde el foco
+        txtNomDuenio.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                // Delay para permitir click en sugerencias
+                javax.swing.Timer timer = new javax.swing.Timer(2500, e -> {
+                    popupSugerencias.setVisible(false);
+                });
+                timer.setRepeats(false);
+                timer.start();
+            }
+        });
+    }
+
+    private void mostrarSugerenciasDuenios(String nombreParcial) {
+        // Verificar que el texto actual sigue siendo el mismo (no cambió mientras
+        // esperaba el timer)
+        if (!nombreParcial.equals(txtNomDuenio.getText().trim())) {
+            return;
+        }
+
+        List<Duenio> sugerencias = control.buscarDueniosParaAutocompletar(nombreParcial);
+
+        // Limpiar sugerencias anteriores
+        popupSugerencias.removeAll();
+
+        if (!sugerencias.isEmpty()) {
+            // Agregar cada sugerencia como un item del menú
+            for (Duenio duenio : sugerencias) {
+                JMenuItem item = new JMenuItem(duenio.getNombre() + " - " + duenio.getCelDuenio());
+
+                item.addActionListener(e -> {
+                    // Al hacer click, completar los campos
+                    txtNomDuenio.setText(duenio.getNombre());
+                    txtCelDuenio.setText(duenio.getCelDuenio());
+                    popupSugerencias.setVisible(false);
+
+                    // Enfocar el siguiente campo
+                    txtObservaciones.requestFocus();
+                });
+
+                popupSugerencias.add(item);
+            }
+
+            // Mostrar el popup justo debajo del campo de texto
+            popupSugerencias.show(txtNomDuenio, 0, txtNomDuenio.getHeight());
+        } else {
+            popupSugerencias.setVisible(false);
+        }
+    }
+
+    // Métodos para validaciones
+    private boolean validarCamposVacios() {
+        if (txtNombre.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Nombre' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        if (txtRaza.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Raza' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        if (txtColor.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Color' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        if (txtNomDuenio.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Nombre Dueño' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        if (txtCelDuenio.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Celular Dueño' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarFormatoTexto() {
+        // Validar que nombre, raza, color y nombre dueño solo contengan letras y
+        // espacios
+        if (!txtNombre.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            mostrarMensaje("El campo 'Nombre' solo puede contener letras", "Error", "Formato incorrecto");
+            return false;
+        }
+        if (!txtRaza.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            mostrarMensaje("El campo 'Raza' solo puede contener letras", "Error", "Formato incorrecto");
+            return false;
+        }
+        if (!txtColor.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            mostrarMensaje("El campo 'Color' solo puede contener letras", "Error", "Formato incorrecto");
+            return false;
+        }
+        if (!txtNomDuenio.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            mostrarMensaje("El campo 'Nombre Dueño' solo puede contener letras", "Error", "Formato incorrecto");
+            return false;
+        }
+
+        // Validar que celular solo contenga números
+        if (!txtCelDuenio.getText().trim().matches("^[0-9]+$")) {
+            mostrarMensaje("El campo 'Celular Dueño' solo puede contener números", "Error", "Formato incorrecto");
+            return false;
+        }
+
+        return true;
+    }
+
+    // Método reutilizable para mostrar mensajes (igual que en ModificarDatos)
+    public void mostrarMensaje(String mensaje, String tipo, String titulo) {
+        JOptionPane optionPane = new JOptionPane(mensaje);
+        if (tipo.equals("Info")) {
+            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            if (tipo.equals("Error")) {
+                optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        JDialog dialog = optionPane.createDialog(titulo);
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
+
+    // Método simplificado para convertir texto a formato título
+    private String convertirATitulo(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return texto;
+        }
+
+        // Versión más simple y legible
+        StringBuilder resultado = new StringBuilder();
+        String[] palabras = texto.trim().toLowerCase().split("\\s+");
+
+        for (int i = 0; i < palabras.length; i++) {
+            String palabra = palabras[i];
+            if (!palabra.isEmpty()) {
+                // Capitalizar primera letra + resto en minúscula
+                resultado.append(palabra.substring(0, 1).toUpperCase())
+                        .append(palabra.substring(1));
+
+                // Agregar espacio entre palabras
+                if (i < palabras.length - 1) {
+                    resultado.append(" ");
+                }
+            }
+        }
+
+        return resultado.toString();
+    }
+
+    // Método simplificado para formato oración (solo primera letra mayúscula)
+    private String convertirAOracion(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return texto;
+        }
+
+        String limpio = texto.trim().toLowerCase();
+        return limpio.substring(0, 1).toUpperCase() + limpio.substring(1);
     }
 
     @SuppressWarnings("unchecked")
@@ -294,24 +485,31 @@ public class CargaDatos extends javax.swing.JFrame {
     }// GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnGuardarActionPerformed
-        // variables auxiliares para pasar como parametros al metodo guardar(), pero lo
-        // puedo hacer directo
-        String nombreMasco = txtNombre.getText();
-        String raza = txtRaza.getText();
-        String color = txtColor.getText();
-        String observaciones = txtObservaciones.getText();
-        String nombreDuenio = txtNomDuenio.getText();
-        String celDuenio = txtCelDuenio.getText();
+        // Primero validar que los campos no estén vacíos
+        if (!validarCamposVacios()) {
+            return;
+        }
+
+        // Luego validar el formato de los datos
+        if (!validarFormatoTexto()) {
+            return;
+        }
+
+        // Si todas las validaciones pasan, proceder a guardar
+        // Aplicar formato título a los campos de texto (excepto observaciones)
+        String nombreMasco = convertirATitulo(txtNombre.getText().trim());
+        String raza = convertirATitulo(txtRaza.getText().trim());
+        String color = convertirATitulo(txtColor.getText().trim());
+        String observaciones = convertirAOracion(txtObservaciones.getText().trim()); // Solo primera letra
+        String nombreDuenio = convertirATitulo(txtNomDuenio.getText().trim());
+        String celDuenio = txtCelDuenio.getText().trim(); // El celular no se convierte
         String alergico = (String) cmbAlergico.getSelectedItem();
         String atEsp = (String) cmbAtEsp.getSelectedItem();
+
         control.guardar(nombreMasco, raza, color, observaciones, nombreDuenio, celDuenio, alergico, atEsp);
 
-        // mensaje de confirmacion
-        JOptionPane optionPane = new JOptionPane("Se guardó correctamente");
-        optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-        JDialog dialog = optionPane.createDialog("Guardado exitoso");
-        dialog.setAlwaysOnTop(true);
-        dialog.setVisible(true);
+        // mensaje de confirmacion usando método reutilizable
+        mostrarMensaje("Se guardó correctamente", "Info", "Guardado exitoso");
 
     }// GEN-LAST:event_btnGuardarActionPerformed
 
