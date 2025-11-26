@@ -207,7 +207,7 @@ public class VerDatos extends javax.swing.JFrame {
         }
     
        
-        else {mostrarMensaje("No hay ninguna mascota para eliminar", "Error", "Error al eliminar");
+        else {mostrarMensaje("No hay ninguna mascota para editar", "Error", "Error al editar");
                 }
                 
                

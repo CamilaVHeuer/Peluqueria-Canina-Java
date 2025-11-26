@@ -1,7 +1,7 @@
-
 package com.mycompany.peluqueriacanina.persistencia;
 
 import com.mycompany.peluqueriacanina.logica.Duenio;
+import com.mycompany.peluqueriacanina.logica.Mascota;
 import com.mycompany.peluqueriacanina.persistencia.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -12,16 +12,17 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
-
+import java.util.ArrayList;
 
 public class DuenioJpaController implements Serializable {
 
     public DuenioJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
     private EntityManagerFactory emf = null;
-    
-     public DuenioJpaController() {
+
+    public DuenioJpaController() {
         emf = Persistence.createEntityManagerFactory("PeluCaninaPU");
     }
 
@@ -30,11 +31,48 @@ public class DuenioJpaController implements Serializable {
     }
 
     public void create(Duenio duenio) {
+        if (duenio.getListaMascotas() == null) {
+            duenio.setListaMascotas(new ArrayList<>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+
+            List<Mascota> attachedLista = new ArrayList<>();
+            for (Mascota m : duenio.getListaMascotas()) {
+                if (m != null && m.getNum_cliente() != 0) {
+                    Mascota ref = em.getReference(Mascota.class, m.getNum_cliente());
+                    attachedLista.add(ref);
+                } else if (m != null) {
+                    // mascota sin id, persistirla después de establecer dueño
+                    attachedLista.add(m);
+                }
+            }
+            duenio.setListaMascotas(attachedLista);
+
             em.persist(duenio);
+
+            // actualizar cada mascota para que apunte al dueño
+            for (Mascota m : duenio.getListaMascotas()) {
+                if (m.getNum_cliente() == 0) {
+                    // nueva mascota (sin id): asignar dueño y persistir
+                    m.setUnDuenio(duenio);
+                    em.persist(m);
+                } else {
+                    Duenio old = m.getUnDuenio();
+                    m.setUnDuenio(duenio);
+                    em.merge(m);
+                    if (old != null && old.getId_duenio() != duenio.getId_duenio()) {
+                        List<Mascota> oldList = old.getListaMascotas();
+                        if (oldList != null) {
+                            oldList.remove(m);
+                            em.merge(old);
+                        }
+                    }
+                }
+            }
+
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -48,7 +86,76 @@ public class DuenioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+
+            Duenio persistentDuenio = em.find(Duenio.class, duenio.getId_duenio());
+            if (persistentDuenio == null) {
+                throw new NonexistentEntityException(
+                        "The duenio with id " + duenio.getId_duenio() + " no longer exists.");
+            }
+
+            List<Mascota> listaOld = persistentDuenio.getListaMascotas() != null ? persistentDuenio.getListaMascotas()
+                    : new ArrayList<>();
+            List<Mascota> listaNew = duenio.getListaMascotas() != null ? duenio.getListaMascotas() : new ArrayList<>();
+
+            List<Mascota> attachedNew = new ArrayList<>();
+            for (Mascota m : listaNew) {
+                if (m != null && m.getNum_cliente() != 0) {
+                    Mascota ref = em.getReference(Mascota.class, m.getNum_cliente());
+                    attachedNew.add(ref);
+                } else if (m != null) {
+                    attachedNew.add(m);
+                }
+            }
+            duenio.setListaMascotas(attachedNew);
+
             duenio = em.merge(duenio);
+
+            // Mascotas removidas: desvincular
+            for (Mascota mOld : listaOld) {
+                boolean found = false;
+                for (Mascota mNew : attachedNew) {
+                    if (mOld.getNum_cliente() != 0 && mNew.getNum_cliente() != 0
+                            && mOld.getNum_cliente() == mNew.getNum_cliente()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    mOld.setUnDuenio(null);
+                    em.merge(mOld);
+                }
+            }
+
+            // Mascotas añadidas: vincular y actualizar viejo dueño si aplica
+            for (Mascota mNew : attachedNew) {
+                boolean wasOld = false;
+                for (Mascota mOld : listaOld) {
+                    if (mOld.getNum_cliente() != 0 && mNew.getNum_cliente() != 0
+                            && mOld.getNum_cliente() == mNew.getNum_cliente()) {
+                        wasOld = true;
+                        break;
+                    }
+                }
+                if (!wasOld) {
+                    if (mNew.getNum_cliente() == 0) {
+                        // nueva mascota: asignar dueño y persistir
+                        mNew.setUnDuenio(duenio);
+                        em.persist(mNew);
+                    } else {
+                        Duenio old = mNew.getUnDuenio();
+                        mNew.setUnDuenio(duenio);
+                        em.merge(mNew);
+                        if (old != null && old.getId_duenio() != duenio.getId_duenio()) {
+                            List<Mascota> oldList = old.getListaMascotas();
+                            if (oldList != null) {
+                                oldList.remove(mNew);
+                                em.merge(old);
+                            }
+                        }
+                    }
+                }
+            }
+
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -77,6 +184,13 @@ public class DuenioJpaController implements Serializable {
                 duenio.getId_duenio();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The duenio with id " + id + " no longer exists.", enfe);
+            }
+
+            if (duenio.getListaMascotas() != null) {
+                for (Mascota m : new ArrayList<>(duenio.getListaMascotas())) {
+                    m.setUnDuenio(null);
+                    em.merge(m);
+                }
             }
             em.remove(duenio);
             em.getTransaction().commit();
@@ -132,5 +246,44 @@ public class DuenioJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    // Buscar dueños por nombre exacto
+    public List<Duenio> buscarDuenioPorNombre(String nombre) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createQuery("SELECT d FROM Duenio d WHERE d.nombre = :nombre");
+            q.setParameter("nombre", nombre);
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    // Buscar dueños por nombre y celular (más preciso para evitar duplicados)
+    public List<Duenio> buscarDuenioPorNombreYCelular(String nombre, String celular) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createQuery("SELECT d FROM Duenio d WHERE d.nombre = :nombre AND d.celDuenio = :celular");
+            q.setParameter("nombre", nombre);
+            q.setParameter("celular", celular);
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    // Buscar dueños que contengan el nombre (para autocompletado)
+    public List<Duenio> buscarDueniosParaAutocompletar(String nombreParcial) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em
+                    .createQuery("SELECT d FROM Duenio d WHERE LOWER(d.nombre) LIKE LOWER(:nombre) ORDER BY d.nombre");
+            q.setParameter("nombre", "%" + nombreParcial + "%");
+            q.setMaxResults(10); // Limitar resultados para autocompletado
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 }

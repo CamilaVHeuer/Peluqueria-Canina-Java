@@ -5,14 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 
-
-
 @Entity
-@Table(name="masota")
+@Table(name = "mascota")
 public class Mascota implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -23,13 +21,14 @@ public class Mascota implements Serializable {
     private String alergico;
     private String atencion_especial;
     private String observaciones;
-    @OneToOne
+    @ManyToOne
     private Duenio unDuenio;
 
     public Mascota() {
     }
 
-    public Mascota(int num_cliente, String nombre, String raza, String color, String alergico, String atencion_especial, String observaciones, Duenio unDuenio) {
+    public Mascota(int num_cliente, String nombre, String raza, String color, String alergico, String atencion_especial,
+            String observaciones, Duenio unDuenio) {
         this.num_cliente = num_cliente;
         this.nombre = nombre;
         this.raza = raza;
@@ -103,7 +102,5 @@ public class Mascota implements Serializable {
     public void setUnDuenio(Duenio unDuenio) {
         this.unDuenio = unDuenio;
     }
-    
-    
-    
+
 }
