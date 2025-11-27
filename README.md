@@ -319,26 +319,34 @@ El sistema detecta cuando un dueño tiene múltiples mascotas y ofrece opciones 
 
 ### 🔍 Demostración de Casos Edge - Base de Datos
 
-**Estado Inicial**: Base de datos con dueños y mascotas antes de los cambios complejos.
+**Estado Inicial**: Base de datos con dueños y mascotas antes de aplicar operaciones complejas.
 
-Juan Perez (id 3) es dueño de las mascotas 4, 5 y 6.
-Carla Santander (id 1) es dueña de las mascotas 1 y 2.
+**Configuración inicial de datos:**
+
+- **Juan Pérez** (ID: 3) → Propietario de mascotas 4, 5 y 6
+- **Carla Santander** (ID: 1) → Propietaria de mascotas 1 y 2
 
 ![BD Dueños - Estado Inicial](docs/screenshots/BD_dueños_antes_cambios.png)
 
 ![BD Mascotas - Estado Inicial](docs/screenshots/BD_mascotas_antes_cambios.png)
 
-**Resultado Final**: Después de aplicar la lógica inteligente de reutilización de dueños.
+**Proceso de Transformación**: Aplicación de la lógica inteligente de gestión de dueños.
 
-La mascota 6 de Juan Perez pasa a ser de un NUEVO DUEÑO Marcos (id 5), mientras que las mascotas 4 y 5 siguen perteneciendo a Juan Perez (solo se modifcó una).
-Las mascotas 1 y 2 ahora son del dueño Lucia Santander (se modificaron ambas mascotas)
+**Operaciones realizadas:**
+
+- **Mascota 6**: Transferida de Juan Pérez → **Nuevo dueño** Marcos Sanabria (ID: 5)
+- **Mascotas 4 y 5**: Permanecen con Juan Pérez (solo se modificó mascota 5)
+- **Mascotas 1 y 2**: Reasignadas a Lucia Martínez
+
 ![Visualización Post Cambios](docs/screenshots/visualicion_post_cambios.png)
 
-Aqui se ve el nuevo dueño creado con id 5 para la mascota 6
+La base de datos refleja la **creación inteligente** del nuevo dueño Marcos Sanabria (ID: 5) específicamente para la mascota 6:
+
 ![BD Dueños - Post Cambios](docs/screenshots/bd_dueños_post_cambios.png)
 
-Luego se revierte el cambio y se le vuelve a asignar la mascota 6 a Juan perez (id 3).
-Aqui se puede observar que la mascota 6 conserva el id 3 del dueño, reutilizandose el existente.
+**Demostración de Reutilización**: Reversión del cambio para validar la lógica de reutilización.
+
+Al reasignar la mascota 6 nuevamente a Juan Pérez, el sistema **reutiliza automáticamente** el dueño existente (ID: 3), demostrando la prevención inteligente de duplicados:
 
 ![BD Mascotas - Post Cambios](docs/screenshots/BD_mascotas_post_cambios.png)
 
