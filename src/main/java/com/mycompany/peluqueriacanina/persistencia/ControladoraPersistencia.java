@@ -75,4 +75,22 @@ public class ControladoraPersistencia {
     public void guardarSoloMascota(Mascota masco) {
         mascoJpa.create(masco);
     }
+
+    // Contar mascotas de un dueño específico
+    public int contarMascotasPorDuenio(int id_duenio) {
+        return mascoJpa.contarMascotasPorDuenio(id_duenio);
+    }
+
+    // Crear nuevo dueño y actualizar mascota
+    public void guardarNuevoDuenioYActualizarMascota(Duenio nuevoDuenio, Mascota masco) {
+        try {
+            // Primero crear el nuevo dueño
+            duenioJpa.create(nuevoDuenio);
+            // Luego actualizar la mascota con el nuevo dueño
+            mascoJpa.edit(masco);
+        } catch (Exception ex) {
+            System.getLogger(ControladoraPersistencia.class.getName()).log(System.Logger.Level.ERROR, (String) null,
+                    ex);
+        }
+    }
 }

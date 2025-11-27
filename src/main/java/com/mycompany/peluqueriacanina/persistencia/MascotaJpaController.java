@@ -13,18 +13,18 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
 
-
 public class MascotaJpaController implements Serializable {
 
     public MascotaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
     private EntityManagerFactory emf = null;
-    
+
     public MascotaJpaController() {
         emf = Persistence.createEntityManagerFactory("PeluCaninaPU");
     }
-    
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
@@ -132,5 +132,16 @@ public class MascotaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public int contarMascotasPorDuenio(int id_duenio) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createQuery("SELECT COUNT(m) FROM Mascota m WHERE m.unDuenio.id_duenio = :id_duenio");
+            q.setParameter("id_duenio", id_duenio);
+            return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
+
 }
