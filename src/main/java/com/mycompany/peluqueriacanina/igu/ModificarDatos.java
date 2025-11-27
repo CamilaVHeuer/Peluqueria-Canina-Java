@@ -336,17 +336,17 @@ public class ModificarDatos extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnGuardarActionPerformed
         // variables auxiliares para pasar como parametros al metodo guardar(), pero lo
         // puedo hacer directo
-        // Datos de la mascota
-        String nombreMasco = txtNombre.getText();
-        String raza = txtRaza.getText();
-        String color = txtColor.getText();
-        String observaciones = txtObservaciones.getText();
+        // Datos de la mascota (aplicando validaciones de formato)
+        String nombreMasco = convertirATitulo(txtNombre.getText());
+        String raza = convertirAOracion(txtRaza.getText());
+        String color = convertirAOracion(txtColor.getText());
+        String observaciones = txtObservaciones.getText().trim();
         String alergico = (String) cmbAlergico.getSelectedItem();
         String atEsp = (String) cmbAtEsp.getSelectedItem();
 
-        // Datos del dueño
-        String nombreDuenio = txtNomDuenio.getText();
-        String celDuenio = txtCelDuenio.getText();
+        // Datos del dueño (aplicando validaciones de formato)
+        String nombreDuenio = convertirATitulo(txtNomDuenio.getText());
+        String celDuenio = txtCelDuenio.getText().trim();
 
         // Verificar si cambió la información del dueño
         Duenio duenioOriginal = masco.getUnDuenio();
@@ -365,7 +365,7 @@ public class ModificarDatos extends javax.swing.JFrame {
             int cantidadMascotas = control.contarMascotasDelDuenio(duenioOriginal.getId_duenio());
 
             if (cantidadMascotas > 1) {
-                // El dueño tiene múltiples mascotas, preguntar qué hacer
+                // El dueño original tiene múltiples mascotas, preguntar qué hacer
                 String mensaje = "El dueño '" + duenioOriginal.getNombre() + "' tiene " + cantidadMascotas +
                         " mascotas registradas.\n\n" +
                         "¿Qué desea hacer?\n\n" +
@@ -380,7 +380,7 @@ public class ModificarDatos extends javax.swing.JFrame {
                         JOptionPane.WARNING_MESSAGE);
 
                 if (opcion == JOptionPane.YES_OPTION) {
-                    // Crear nuevo dueño para esta mascota
+                    // Usar lógica inteligente para crear/reutilizar dueño
                     control.modificarMascotaConNuevoDuenio(masco, nombreMasco, raza, color,
                             observaciones, alergico, atEsp,
                             nombreDuenio, celDuenio);
@@ -393,10 +393,12 @@ public class ModificarDatos extends javax.swing.JFrame {
                             "Info", "Edición Correcta");
                 }
             } else {
-                // El dueño solo tiene esta mascota, modificar normalmente
-                control.modificarMascota(masco, nombreMasco, raza, color, observaciones,
-                        alergico, atEsp, nombreDuenio, celDuenio);
-                mostrarMensaje("Edición realizada correctamente", "Info", "Edición Correcta");
+                // El dueño original solo tiene esta mascota
+                // PERO necesitamos verificar si el nuevo dueño ya existe
+                control.modificarMascotaConNuevoDuenio(masco, nombreMasco, raza, color,
+                        observaciones, alergico, atEsp,
+                        nombreDuenio, celDuenio);
+                mostrarMensaje("Mascota actualizada correctamente", "Info", "Edición Correcta");
             }
         } else {
             // No cambió la información del dueño, solo modificar la mascota
@@ -486,6 +488,41 @@ public class ModificarDatos extends javax.swing.JFrame {
         dialog = optionPane.createDialog(titulo);
         dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
+    }
+
+    // Métodos para validación y formato de datos
+    private String convertirATitulo(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return texto;
+        }
+
+        StringBuilder resultado = new StringBuilder();
+        String[] palabras = texto.trim().toLowerCase().split("\\s+");
+
+        for (int i = 0; i < palabras.length; i++) {
+            String palabra = palabras[i];
+            if (!palabra.isEmpty()) {
+                // Capitalizar primera letra + resto en minúscula
+                resultado.append(palabra.substring(0, 1).toUpperCase())
+                        .append(palabra.substring(1));
+
+                // Agregar espacio entre palabras
+                if (i < palabras.length - 1) {
+                    resultado.append(" ");
+                }
+            }
+        }
+
+        return resultado.toString();
+    }
+
+    private String convertirAOracion(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return texto;
+        }
+
+        String limpio = texto.trim().toLowerCase();
+        return limpio.substring(0, 1).toUpperCase() + limpio.substring(1);
     }
 
     private void configurarAutocompletado() {

@@ -260,10 +260,13 @@ public class DuenioJpaController implements Serializable {
     }
 
     // Buscar dueños por nombre y celular (más preciso para evitar duplicados)
+    // Búsqueda robusta que ignora espacios y diferencias de capitalización
     public List<Duenio> buscarDuenioPorNombreYCelular(String nombre, String celular) {
         EntityManager em = getEntityManager();
         try {
-            Query q = em.createQuery("SELECT d FROM Duenio d WHERE d.nombre = :nombre AND d.celDuenio = :celular");
+            Query q = em.createQuery("SELECT d FROM Duenio d WHERE " +
+                    "TRIM(UPPER(d.nombre)) = TRIM(UPPER(:nombre)) AND " +
+                    "TRIM(d.celDuenio) = TRIM(:celular)");
             q.setParameter("nombre", nombre);
             q.setParameter("celular", celular);
             return q.getResultList();

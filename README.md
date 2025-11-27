@@ -1,6 +1,51 @@
 # 🐕 Sistema de Gestión - Peluquería Canina
 
-Sistema de gestión desarrollado en Java para peluquerías caninas que permite administrar información de mascotas y sus propietarios de manera eficiente y sencilla.
+Sistema de gestión desarrollado en Java para peluquerías caninas que permite administrar información de mascotas y sus propietarios de manera eficiente ## 🔧 Funcionalidades Avanzadas Impleme## 📝 Evolución del Proyecto
+
+Este sistema comenzó como parte de mis estudios en **Programación Orientada a Objetos (POO) en Java**, pero evolucionó hacia una **demostración completa de desarrollo empresarial** que incluye:
+
+- **Lógica de negocio compleja** con casos de uso reales y manejo de edge cases
+- **Experiencia de usuario profesional** con interfaces intuitivas y validación automática
+- **Arquitectura robusta** preparada para entornos de producción
+- **Mejores prácticas de desarrollo** incluyendo seguridad, mantenibilidad y formato consistente de datos
+- **Resolución de problemas reales**: Desde validación faltante hasta duplicados en BD y casos edge complejos
+
+### 🏆 Hitos Técnicos Alcanzados
+
+1. **Implementación de autocompletado avanzado** con `Timer` y `JPopupMenu`
+2. **Lógica sofisticada de gestión de dueños** con múltiples mascotas
+3. **Sistema robusto de validación** con métodos de formato profesional
+4. **Búsquedas inteligentes en BD** que manejan variaciones de capitalización y espacios
+5. **Prevención completa de duplicados** mediante reutilización inteligente de entidades
+6. **Manejo de casos edge complejos** en cambios de relaciones entre dueños y mascotas### 🎯 Sistema de Validación Inteligente
+
+```java
+// Método para formato tipo título (Juan Pablo López)
+private String convertirATitulo(String texto)
+
+// Método para formato de oración (Golden retriever)
+private String convertirAOracion(String texto)
+
+// Búsqueda robusta en base de datos
+public List<Duenio> buscarDuenioPorNombreYCelular(String nombre, String celular)
+```
+
+### 🚀 Características de Nivel Empresarial
+
+- **Búsqueda inteligente en BD**: Queries con `TRIM()` y `UPPER()` que manejan variaciones de formato
+- **Prevención proactiva de duplicados**: Sistema que detecta y reutiliza entidades existentes
+- **Validación automática**: Aplicación consistente de formato en todos los formularios
+- **Gestión de relaciones complejas**: Lógica sofisticada para cambios de dueños entre mascotas
+- **Experiencia de usuario premium**: Autocompletado, validaciones y confirmaciones inteligentes
+
+## 🔧 Funcionalidades Preparadas para Expansión
+
+El proyecto incluye funcionalidades base preparadas para futuras mejoras:
+
+- **`buscarDuenioPorNombre()`**: Búsqueda exacta de dueños (preparada para pantallas de administración)
+- **Arquitectura escalable**: Diseñada para agregar nuevas funcionalidades sin refactoring
+- **Base para reportes**: Estructura preparada para generar informes y analytics
+- **Sistema de logging**: Infraestructura lista para auditoría y debugging avanzadola.
 
 ## 📋 Descripción del Proyecto
 
@@ -15,7 +60,11 @@ Esta aplicación de escritorio está diseñada para propietarios de peluquerías
 - **Visualización completa de datos**: Lista organizada con información detallada de mascotas y propietarios
 - **Edición avanzada con detección de cambios**: El sistema detecta automáticamente modificaciones en datos del dueño y ofrece opciones inteligentes
 - **Eliminación segura con confirmación**: Protección contra eliminaciones accidentales con diálogos de confirmación
-- **Validación robusta de datos**: Manejo inteligente de espacios en blanco y validación de campos para garantizar integridad de datos
+- **Validación robusta de datos**: Sistema completo de formato y validación que incluye:
+  - **Formato automático de nombres**: Capitalización inteligente (Juan Pablo López)
+  - **Estandarización de datos**: Primer letra en mayúscula para razas, colores y observaciones
+  - **Búsqueda inteligente**: Comparaciones insensibles a mayúsculas/minúsculas y espacios en blanco
+  - **Prevención de duplicados**: Reutilización automática de dueños existentes incluso con variaciones de formato
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -34,18 +83,24 @@ Esta aplicación de escritorio está diseñada para propietarios de peluquerías
 - **Detección inteligente de cambios**: Comparación robusta de datos con manejo de `null` y espacios en blanco
 - **Gestión de relaciones complejas**: Manejo sofisticado de dueños con múltiples mascotas
 - **Prevención de duplicados**: Sistema que reutiliza dueños existentes cuando es apropiado
+- **Validación de formato profesional**: Métodos `convertirATitulo()` y `convertirAOracion()` para estandarización de datos
+- **Búsqueda robusta en BD**: Consultas con `TRIM()` y `UPPER()` para matching inteligente
 
 ### 🎨 Experiencia de Usuario (UX)
 
 - **Autocompletado en tiempo real**: Sugerencias dinámicas con `Timer` y `JPopupMenu`
 - **Diálogos de confirmación inteligentes**: El usuario siempre mantiene control sobre las decisiones críticas
 - **Validación proactiva**: Feedback inmediato para prevenir errores de entrada
+- **Consistencia visual**: Formato uniforme de datos en todas las pantallas
+- **Manejo de casos edge**: Lógica refinada para escenarios complejos de cambio de dueños
 
 ### 🏗️ Arquitectura Profesional
 
 - **Separación de capas**: Presentación, lógica de negocio y persistencia claramente definidas
 - **Patrones de diseño**: Implementación de DAO, Factory y Observer patterns
 - **Seguridad de credenciales**: Sistema de templates para proteger información sensible
+- **Reutilización de código**: Métodos de validación compartidos entre formularios
+- **Queries optimizadas**: Consultas SQL eficientes con funciones de cadena para matching robusto
 
 ## 📁 Estructura del Proyecto
 
@@ -98,12 +153,21 @@ src/
    - **Opción SÍ**: Crea/reutiliza un dueño con los nuevos datos solo para esta mascota
    - **Opción NO**: Actualiza el dueño original (afecta todas sus mascotas)
 
+### 🔍 Casos Edge Resueltos
+
+**Escenario Complejo**: Marcos tiene mascotas Filipa y Marlot. Quieres cambiar Filipa para que pertenezca a Carla (quien ya existe en el sistema).
+
+- **Problema anterior**: El sistema creaba un nuevo dueño "Carla" duplicado
+- **Solución implementada**: Búsqueda inteligente con `TRIM()` y `UPPER()` que detecta el Carla existente y lo reutiliza
+- **Resultado**: Filipa queda asignada al Carla original, Marcos mantiene solo a Marlot
+
 ### 🎯 Beneficios Empresariales
 
 - **Flexibilidad**: Adapta el sistema a diferentes necesidades de negocio
-- **Integridad de datos**: Previene inconsistencias en la base de datos
+- **Integridad de datos**: Previene inconsistencias y duplicados en la base de datos
 - **Control total**: El usuario siempre decide qué acción tomar
 - **Experiencia premium**: Interfaz que entiende y anticipa necesidades del usuario
+- **Consistencia profesional**: Formato estandarizado automático en todos los datos
 
 ## ⚙️ Instalación y Configuración
 
