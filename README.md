@@ -1,6 +1,44 @@
 # 🐕 Sistema de Gestión - Peluquería Canina
 
-Sistema de gestión desarrollado en Java para peluquerías caninas que permite administrar información de mascotas y sus propietarios de manera eficiente ## 🔧 Funcionalidades Avanzadas Impleme## 📝 Evolución del Proyecto
+Sistema de gestión desarrollado en Java para peluquerías caninas que permite administrar información de mascotas y sus propietarios de manera eficiente y sencilla.
+
+![Pantalla Principal](docs/screenshots/pantalla_incial.png)
+
+> **💡 Sistema Completo**: Desde registro con autocompletado hasta gestión inteligente de relaciones complejas entre dueños y mascotas
+
+## 🔧 Funcionalidades Avanzadas Implementadas
+
+### 🎯 Sistema de Validación Inteligente
+
+```java
+// Método para formato tipo título (Juan Pablo López)
+private String convertirATitulo(String texto)
+
+// Método para formato de oración (Golden retriever)
+private String convertirAOracion(String texto)
+
+// Búsqueda robusta en base de datos
+public List<Duenio> buscarDuenioPorNombreYCelular(String nombre, String celular)
+```
+
+### 🚀 Características de Nivel Empresarial
+
+- **Búsqueda inteligente en BD**: Queries con `TRIM()` y `UPPER()` que manejan variaciones de formato
+- **Prevención proactiva de duplicados**: Sistema que detecta y reutiliza entidades existentes
+- **Validación automática**: Aplicación consistente de formato en todos los formularios
+- **Gestión de relaciones complejas**: Lógica sofisticada para cambios de dueños entre mascotas
+- **Experiencia de usuario premium**: Autocompletado, validaciones y confirmaciones inteligentes
+
+## 🔧 Funcionalidades Preparadas para Expansión
+
+El proyecto incluye funcionalidades base preparadas para futuras mejoras:
+
+- **`buscarDuenioPorNombre()`**: Búsqueda exacta de dueños (preparada para pantallas de administración)
+- **Arquitectura escalable**: Diseñada para agregar nuevas funcionalidades sin refactoring
+- **Base para reportes**: Estructura preparada para generar informes y analytics
+- **Sistema de logging**: Infraestructura lista para auditoría y debugging avanzado
+
+## 📝 Evolución del Proyecto
 
 Este sistema comenzó como parte de mis estudios en **Programación Orientada a Objetos (POO) en Java**, pero evolucionó hacia una **demostración completa de desarrollo empresarial** que incluye:
 
@@ -124,9 +162,26 @@ src/
 │   │           ├── MascotaJpaController.java
 │   │           └── DuenioJpaController.java
 │   └── resources/
+│       ├── images/                            # Iconos y recursos gráficos
+│       │   ├── editar.png                     # Icono botón editar
+│       │   ├── eliminar.png                   # Icono botón eliminar
+│       │   ├── guardr.png                     # Icono botón guardar
+│       │   ├── limpiar.png                    # Icono botón limpiar
+│       │   ├── volver.png                     # Icono botón volver
+│       │   └── volverinicio.png              # Icono botón inicio
 │       └── META-INF/
 │           ├── persistence.example.xml        # Plantilla de configuración JPA
 │           └── persistence.xml                # Configuración JPA (local, no incluido en Git)
+├── docs/
+│   └── screenshots/                           # Capturas de pantalla para documentación
+│       ├── pantalla_incial.png               # Pantalla principal
+│       ├── carda_datos.png                   # Formulario de carga
+│       ├── visualizacion_datos.png           # Vista de datos
+│       ├── mensaje_confirmar_cambios.png     # Diálogos de confirmación
+│       ├── BD_dueños_antes_cambios.png       # Estado inicial BD
+│       ├── BD_mascotas_post_cambios.png      # Estado final BD
+│       ├── visualizacion_final.png           # Resultado final
+│       └── confirmacion_eliminacion.png      # Confirmación de eliminación
 └── pom.xml                                    # Configuración Maven
 ```
 
@@ -233,6 +288,62 @@ src/
 4. **Ver Datos**: Visualizar todos los registros en formato de tabla
 5. **Editar**: Seleccionar un registro y modificar la información necesaria
 6. **Eliminar**: Remover registros que ya no sean necesarios
+
+## 📸 Capturas de Pantalla
+
+### 🏠 Pantalla Principal
+
+La interfaz principal ofrece navegación intuitiva hacia todas las funcionalidades del sistema.
+
+![Pantalla Principal](docs/screenshots/pantalla_incial.png)
+
+### ➕ Formulario de Carga de Datos
+
+Formulario avanzado con **autocompletado inteligente** que sugiere dueños existentes mientras escribes, evitando duplicados y agilizando la carga.
+
+![Carga de Datos](docs/screenshots/carda_datos.png)
+
+### 👁️ Visualización de Datos
+
+Vista completa de todas las mascotas registradas con información detallada de sus dueños.
+
+![Visualización de Datos](docs/screenshots/visualizacion_datos.png)
+
+### 🔧 Gestión Inteligente de Dueños
+
+El sistema detecta cuando un dueño tiene múltiples mascotas y ofrece opciones inteligentes al usuario.
+
+![Mensaje de Confirmación - Múltiples Mascotas](docs/screenshots/mensaje_confirmar_cambios.png)
+
+![Mensaje de Confirmación - Opciones](docs/screenshots/mensaje_confirmar_cambios_2.png)
+
+### 🔍 Demostración de Casos Edge - Base de Datos
+
+**Estado Inicial**: Base de datos con dueños y mascotas antes de los cambios complejos.
+
+![BD Dueños - Estado Inicial](docs/screenshots/BD_dueños_antes_cambios.png)
+
+![BD Mascotas - Estado Inicial](docs/screenshots/BD_mascotas_antes_cambios.png)
+
+**Resultado Final**: Después de aplicar la lógica inteligente de reutilización de dueños.
+
+![BD Dueños - Post Cambios](docs/screenshots/bd_dueños_opst_cambios.png)
+
+![BD Mascotas - Post Cambios](docs/screenshots/BD_mascotas_post_cambios.png)
+
+### 🎯 Visualización Final
+
+Estado final de la aplicación mostrando los datos correctamente organizados tras las operaciones complejas.
+
+![Visualización Post Cambios](docs/screenshots/visualicion_post_cambios.png)
+
+![Estado Final](docs/screenshots/visualizacion_final.png)
+
+### 🗑️ Eliminación Segura
+
+Confirmación antes de eliminar registros para prevenir eliminaciones accidentales.
+
+![Confirmación de Eliminación](docs/screenshots/confirmacion_eliminacion.png)
 
 ## 🔧 Configuración Adicional
 
