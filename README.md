@@ -321,21 +321,30 @@ El sistema detecta cuando un dueño tiene múltiples mascotas y ofrece opciones 
 
 **Estado Inicial**: Base de datos con dueños y mascotas antes de los cambios complejos.
 
+Juan Perez (id 3) es dueño de las mascotas 4, 5 y 6.
+Carla Santander (id 1) es dueña de las mascotas 1 y 2.
+
 ![BD Dueños - Estado Inicial](docs/screenshots/BD_dueños_antes_cambios.png)
 
 ![BD Mascotas - Estado Inicial](docs/screenshots/BD_mascotas_antes_cambios.png)
 
 **Resultado Final**: Después de aplicar la lógica inteligente de reutilización de dueños.
 
-![BD Dueños - Post Cambios](docs/screenshots/bd_dueños_opst_cambios.png)
+La mascota 6 de Juan Perez pasa a ser de un NUEVO DUEÑO Marcos (id 5), mientras que las mascotas 4 y 5 siguen perteneciendo a Juan Perez (solo se modifcó una).
+Las mascotas 1 y 2 ahora son del dueño Lucia Santander (se modificaron ambas mascotas)
+![Visualización Post Cambios](docs/screenshots/visualicion_post_cambios.png)
+
+Aqui se ve el nuevo dueño creado con id 5 para la mascota 6
+![BD Dueños - Post Cambios](docs/screenshots/bd_dueños_post_cambios.png)
+
+Luego se revierte el cambio y se le vuelve a asignar la mascota 6 a Juan perez (id 3).
+Aqui se puede observar que la mascota 6 conserva el id 3 del dueño, reutilizandose el existente.
 
 ![BD Mascotas - Post Cambios](docs/screenshots/BD_mascotas_post_cambios.png)
 
 ### 🎯 Visualización Final
 
 Estado final de la aplicación mostrando los datos correctamente organizados tras las operaciones complejas.
-
-![Visualización Post Cambios](docs/screenshots/visualicion_post_cambios.png)
 
 ![Estado Final](docs/screenshots/visualizacion_final.png)
 
