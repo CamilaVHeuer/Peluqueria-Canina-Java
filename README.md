@@ -175,7 +175,7 @@ src/
 ├── docs/
 │   └── screenshots/                           # Capturas de pantalla para documentación
 │       ├── pantalla_incial.png               # Pantalla principal
-│       ├── carda_datos.png                   # Formulario de carga
+│       ├── carga_datos.png                   # Formulario de carga
 │       ├── visualizacion_datos.png           # Vista de datos
 │       ├── mensaje_confirmar_cambios.png     # Diálogos de confirmación
 │       ├── BD_dueños_antes_cambios.png       # Estado inicial BD
@@ -301,7 +301,7 @@ La interfaz principal ofrece navegación intuitiva hacia todas las funcionalidad
 
 Formulario avanzado con **autocompletado inteligente** que sugiere dueños existentes mientras escribes, evitando duplicados y agilizando la carga.
 
-![Carga de Datos](docs/screenshots/carda_datos.png)
+![Carga de Datos](docs/screenshots/carga_datos.png)
 
 ### 👁️ Visualización de Datos
 
