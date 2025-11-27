@@ -94,3 +94,6 @@ Desktop.ini
 
 # Application specific
 # Add any specific files your application generates that shouldn't be tracked
+
+# Database configuration with sensitive credentials
+src/main/resources/META-INF/persistence.xml

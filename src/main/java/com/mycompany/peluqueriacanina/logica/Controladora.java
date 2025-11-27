@@ -107,4 +107,51 @@ public class Controladora {
     public List<Duenio> verificarDuenioExistente(String nombre, String celular) {
         return controlPersis.buscarDuenioPorNombreYCelular(nombre, celular);
     }
+
+    // Método para contar mascotas de un dueño
+    public int contarMascotasDelDuenio(int id_duenio) {
+        return controlPersis.contarMascotasPorDuenio(id_duenio);
+    }
+
+    // Método para crear un nuevo dueño y asignarlo a una mascota
+    public void modificarMascotaConNuevoDuenio(Mascota masco, String nombreMasco, String raza, String color,
+            String observaciones, String alergico, String atEsp, String nombreDuenio, String celDuenio) {
+
+        // Modificar datos de la mascota
+        masco.setNombre(nombreMasco);
+        masco.setRaza(raza);
+        masco.setColor(color);
+        masco.setObservaciones(observaciones);
+        masco.setAlergico(alergico);
+        masco.setAtencion_especial(atEsp);
+
+        // VERIFICAR SI YA EXISTE UN DUEÑO CON ESE NOMBRE Y CELULAR
+        List<Duenio> duenosExistentes = controlPersis.buscarDuenioPorNombreYCelular(nombreDuenio, celDuenio);
+
+        Duenio duenioParaAsignar;
+        if (!duenosExistentes.isEmpty()) {
+            // Ya existe un dueño con esos datos, usar el existente
+            duenioParaAsignar = duenosExistentes.get(0);
+            System.out.println("REUTILIZANDO dueño existente: " + duenioParaAsignar.getNombre() + " (ID: "
+                    + duenioParaAsignar.getId_duenio() + ")");
+        } else {
+            // No existe, crear un nuevo dueño
+            duenioParaAsignar = new Duenio();
+            duenioParaAsignar.setNombre(nombreDuenio);
+            duenioParaAsignar.setCelDuenio(celDuenio);
+            System.out.println("CREANDO nuevo dueño: " + nombreDuenio);
+        }
+
+        // Asignar el dueño a la mascota
+        masco.setUnDuenio(duenioParaAsignar);
+
+        // Guardar según corresponda
+        if (duenosExistentes.isEmpty()) {
+            // Crear nuevo dueño y actualizar mascota
+            controlPersis.guardarNuevoDuenioYActualizarMascota(duenioParaAsignar, masco);
+        } else {
+            // Solo actualizar la mascota (el dueño ya existe)
+            controlPersis.modificarMascota(masco);
+        }
+    }
 }

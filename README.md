@@ -8,21 +8,44 @@ Esta aplicación de escritorio está diseñada para propietarios de peluquerías
 
 ### ✨ Funcionalidades Principales
 
-- **Registro de mascotas y dueños**: Formulario completo para cargar nuevos clientes
-- **Visualización de datos**: Lista organizada de todas las mascotas registradas
-- **Edición de información**: Modificar datos existentes de mascotas y propietarios
-- **Eliminación de registros**: Remover clientes que ya no utilizan el servicio
-- **Limpieza de formularios**: Función para limpiar campos en caso de error durante la carga
+- **Registro inteligente con autocompletado**: Formulario avanzado que sugiere dueños existentes mientras escribes, evitando duplicados y agilizando la carga
+- **Gestión sofisticada de dueños compartidos**: Sistema inteligente que detecta cuando un dueño tiene múltiples mascotas y permite al usuario elegir entre:
+  - Crear un nuevo dueño específico para esa mascota o reemplazarolo por otro existente
+  - Modificar el dueño existente (afectando todas sus mascotas)
+- **Visualización completa de datos**: Lista organizada con información detallada de mascotas y propietarios
+- **Edición avanzada con detección de cambios**: El sistema detecta automáticamente modificaciones en datos del dueño y ofrece opciones inteligentes
+- **Eliminación segura con confirmación**: Protección contra eliminaciones accidentales con diálogos de confirmación
+- **Validación robusta de datos**: Manejo inteligente de espacios en blanco y validación de campos para garantizar integridad de datos
 
 ## 🛠️ Tecnologías Utilizadas
 
 - **Java**: Lenguaje de programación principal
-- **Java Swing**: Interfaz gráfica de usuario (GUI)
+- **Java Swing**: Interfaz gráfica de usuario (GUI) con componentes avanzados
 - **Maven**: Gestión de dependencias y construcción del proyecto
 - **MySQL**: Base de datos relacional
-- **JPA (Java Persistence API)**: Capa de persistencia
+- **JPA (Java Persistence API)**: Capa de persistencia con consultas personalizadas
 - **EclipseLink**: Proveedor de JPA para manejo de entidades
 - **NetBeans**: IDE utilizado para el desarrollo (formularios .form incluidos)
+
+## 🎯 Características Técnicas Destacadas
+
+### 🧠 Lógica de Negocio Avanzada
+
+- **Detección inteligente de cambios**: Comparación robusta de datos con manejo de `null` y espacios en blanco
+- **Gestión de relaciones complejas**: Manejo sofisticado de dueños con múltiples mascotas
+- **Prevención de duplicados**: Sistema que reutiliza dueños existentes cuando es apropiado
+
+### 🎨 Experiencia de Usuario (UX)
+
+- **Autocompletado en tiempo real**: Sugerencias dinámicas con `Timer` y `JPopupMenu`
+- **Diálogos de confirmación inteligentes**: El usuario siempre mantiene control sobre las decisiones críticas
+- **Validación proactiva**: Feedback inmediato para prevenir errores de entrada
+
+### 🏗️ Arquitectura Profesional
+
+- **Separación de capas**: Presentación, lógica de negocio y persistencia claramente definidas
+- **Patrones de diseño**: Implementación de DAO, Factory y Observer patterns
+- **Seguridad de credenciales**: Sistema de templates para proteger información sensible
 
 ## 📁 Estructura del Proyecto
 
@@ -47,9 +70,40 @@ src/
 │   │           └── DuenioJpaController.java
 │   └── resources/
 │       └── META-INF/
-│           └── persistence.xml                # Configuración JPA
+│           ├── persistence.example.xml        # Plantilla de configuración JPA
+│           └── persistence.xml                # Configuración JPA (local, no incluido en Git)
 └── pom.xml                                    # Configuración Maven
 ```
+
+## 💡 Funcionalidad Destacada: Gestión Inteligente de Dueños
+
+### 🔄 Flujo de Trabajo Avanzado
+
+**Escenario**: Un dueño tiene múltiples mascotas y necesitas editar información de una sola.
+
+1. **Detección Automática**: El sistema detecta automáticamente cambios en los datos del dueño
+2. **Análisis de Impacto**: Verifica cuántas mascotas pertenecen al dueño modificado
+3. **Decisión del Usuario**: Si el dueño tiene múltiples mascotas, presenta opciones claras:
+
+   ```
+   El dueño 'Juan Pérez' tiene 3 mascotas registradas.
+
+   ¿Qué desea hacer?
+
+   • SÍ: Crear/reemplazar un nuevo dueño solo para esta mascota
+   • NO: Modificar el dueño existente (afectará todas sus mascotas)
+   ```
+
+4. **Ejecución Inteligente**:
+   - **Opción SÍ**: Crea/reutiliza un dueño con los nuevos datos solo para esta mascota
+   - **Opción NO**: Actualiza el dueño original (afecta todas sus mascotas)
+
+### 🎯 Beneficios Empresariales
+
+- **Flexibilidad**: Adapta el sistema a diferentes necesidades de negocio
+- **Integridad de datos**: Previene inconsistencias en la base de datos
+- **Control total**: El usuario siempre decide qué acción tomar
+- **Experiencia premium**: Interfaz que entiende y anticipa necesidades del usuario
 
 ## ⚙️ Instalación y Configuración
 
@@ -78,16 +132,23 @@ src/
    CREATE DATABASE peluqueria_canina;
    ```
 
-3. **Configurar las credenciales de MySQL**
+3. **Configurar las credenciales de MySQL** 🔒
 
-   - Editar el archivo `src/main/resources/META-INF/persistence.xml`
-   - Ajustar las credenciales de conexión según tu configuración local:
+   **⚠️ IMPORTANTE - Seguridad de Credenciales:**
+
+   Por seguridad, las credenciales reales de la base de datos NO están incluidas en el repositorio.
+
+   - Copia el archivo de ejemplo: `src/main/resources/META-INF/persistence.example.xml`
+   - Renómbralo como `persistence.xml` en la misma ubicación
+   - Edita el nuevo archivo con tus credenciales reales:
 
    ```xml
    <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/peluqueria_canina?serverTimezone=UTC"/>
    <property name="jakarta.persistence.jdbc.user" value="tu_usuario_mysql"/>
    <property name="jakarta.persistence.jdbc.password" value="tu_contraseña_mysql"/>
    ```
+
+   **Nota**: El archivo `persistence.xml` está excluido del control de versiones por motivos de seguridad.
 
 4. **Compilar el proyecto**
 
@@ -115,9 +176,23 @@ src/
 - **JPA Schema Generation**: Configurado para crear automáticamente las tablas necesarias
 - **Charset**: UTF-8 configurado para manejo correcto de caracteres especiales
 
-## 📝 Origen del Proyecto
+## � Funcionalidades Preparadas para Expansión
 
-Este sistema surgió como parte de mis estudios en **Programación Orientada a Objetos (POO) en Java**, pero ha evolucionado hacia un proyecto más completo para demostrar habilidades en desarrollo de aplicaciones empresariales con Java.
+El proyecto incluye funcionalidades base preparadas para futuras mejoras:
+
+- **`buscarDuenioPorNombre()`**: Búsqueda exacta de dueños (preparada para pantallas de administración)
+- **Arquitectura escalable**: Diseñada para agregar nuevas funcionalidades sin refactoring
+- **Base para reportes**: Estructura preparada para generar informes y analytics
+- **Sistema de logging**: Infraestructura lista para auditoría y debugging avanzado
+
+## �📝 Origen del Proyecto
+
+Este sistema comenzó como parte de mis estudios en **Programación Orientada a Objetos (POO) en Java**, pero evolucionó hacia una **demostración completa de desarrollo empresarial** que incluye:
+
+- **Lógica de negocio compleja** con casos de uso reales
+- **Experiencia de usuario profesional** con interfaces intuitivas
+- **Arquitectura robusta** preparada para entornos de producción
+- **Mejores prácticas de desarrollo** incluyendo seguridad y mantenibilidad
 
 ## 📞 Contacto
 
