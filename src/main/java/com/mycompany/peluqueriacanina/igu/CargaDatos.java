@@ -16,7 +16,7 @@ public class CargaDatos extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(CargaDatos.class.getName());
 
-    // instancio a controladora logica
+    // declaro una variable de tipo controladora (logica)
     Controladora control = null;
 
     // Variables para autocompletado
