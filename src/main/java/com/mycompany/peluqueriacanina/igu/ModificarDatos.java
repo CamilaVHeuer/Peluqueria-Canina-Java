@@ -18,7 +18,7 @@ public class ModificarDatos extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(ModificarDatos.class.getName());
 
-    // instancio a controladora logica
+    // declaro a controladora logica
     Controladora control = null;
     // creo una variable global de num_cliente
     int num_cliente;
