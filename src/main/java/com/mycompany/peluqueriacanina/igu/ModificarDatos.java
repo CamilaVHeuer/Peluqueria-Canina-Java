@@ -20,8 +20,7 @@ public class ModificarDatos extends javax.swing.JFrame {
 
         // declaro a controladora logica
         private Controladora control = null;
-        // creo una variable global de num_cliente
-        private int num_cliente;
+
         // declaro como variable global una masco
         private Mascota masco;
 
@@ -31,7 +30,6 @@ public class ModificarDatos extends javax.swing.JFrame {
         // agrego en el constructor a num_cliente
         public ModificarDatos(int num_cliente) {
                 control = new Controladora();
-                // this.num_cliente = num_cliente;
                 initComponents();
                 configurarAutocompletado();
                 cargarDatos(num_cliente);
@@ -402,7 +400,17 @@ public class ModificarDatos extends javax.swing.JFrame {
         }// GEN-LAST:event_btnLimpiarActionPerformed
 
         private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnGuardarActionPerformed
-                // variables auxiliares para pasar como parametros al metodo guardar(), pero lo
+                // Primero validar que los campos no estén vacíos
+                 if (!validarCamposVacios()) {
+                    return;
+        }
+
+                 // Luego validar el formato de los datos
+                if (!validarFormatoTexto()) {
+                    return;
+                }
+
+                 // variables auxiliares para pasar como parametros al metodo guardar(), pero lo
                 // puedo hacer directo
                 // Datos de la mascota (aplicando validaciones de formato)
                 String nombreMasco = convertirATitulo(txtNombre.getText());
@@ -671,4 +679,58 @@ public class ModificarDatos extends javax.swing.JFrame {
                         popupSugerencias.setVisible(false);
                 }
         }
+
+    private boolean validarCamposVacios() {
+         if (txtNombre.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Nombre' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        if (txtRaza.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Raza' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        if (txtColor.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Color' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        if (txtNomDuenio.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Nombre Dueño' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        if (txtCelDuenio.getText().trim().isEmpty()) {
+            mostrarMensaje("El campo 'Celular Dueño' no puede estar vacío", "Error", "Campo obligatorio");
+            return false;
+        }
+        return true;
+    }
+    
+
+    private boolean validarFormatoTexto() {
+        // Validar que nombre, raza, color y nombre dueño solo contengan letras y
+        // espacios
+        if (!txtNombre.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            mostrarMensaje("El campo 'Nombre' solo puede contener letras", "Error", "Formato incorrecto");
+            return false;
+        }
+        if (!txtRaza.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            mostrarMensaje("El campo 'Raza' solo puede contener letras", "Error", "Formato incorrecto");
+            return false;
+        }
+        if (!txtColor.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            mostrarMensaje("El campo 'Color' solo puede contener letras", "Error", "Formato incorrecto");
+            return false;
+        }
+        if (!txtNomDuenio.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            mostrarMensaje("El campo 'Nombre Dueño' solo puede contener letras", "Error", "Formato incorrecto");
+            return false;
+        }
+
+        // Validar que celular solo contenga números
+        if (!txtCelDuenio.getText().trim().matches("^[0-9]+$")) {
+            mostrarMensaje("El campo 'Celular Dueño' solo puede contener números", "Error", "Formato incorrecto");
+            return false;
+        }
+
+        return true;
+    }
 }
