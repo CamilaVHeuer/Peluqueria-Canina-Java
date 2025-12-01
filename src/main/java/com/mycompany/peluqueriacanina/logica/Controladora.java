@@ -104,10 +104,6 @@ public class Controladora {
         return controlPersis.buscarDueniosParaAutocompletar(nombreParcial);
     }
 
-    public List<Duenio> verificarDuenioExistente(String nombre, String celular) {
-        return controlPersis.buscarDuenioPorNombreYCelular(nombre, celular);
-    }
-
     // Método para contar mascotas de un dueño
     public int contarMascotasDelDuenio(int id_duenio) {
         return controlPersis.contarMascotasPorDuenio(id_duenio);
