@@ -4,7 +4,7 @@ package com.mycompany.peluqueriacanina.igu;
 import com.mycompany.peluqueriacanina.logica.Controladora;
 import com.mycompany.peluqueriacanina.logica.Mascota;
 import com.mycompany.peluqueriacanina.logica.Duenio;
-import javax.swing.JDialog;
+import com.mycompany.peluqueriacanina.utilidadesIGU.UtilidadesIGU;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -401,27 +401,27 @@ public class ModificarDatos extends javax.swing.JFrame {
 
         private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnGuardarActionPerformed
                 // Primero validar que los campos no estén vacíos
-                 if (!validarCamposVacios()) {
-                    return;
-        }
-
-                 // Luego validar el formato de los datos
-                if (!validarFormatoTexto()) {
-                    return;
+                if (!validarCamposVacios()) {
+                        return;
                 }
 
-                 // variables auxiliares para pasar como parametros al metodo guardar(), pero lo
+                // Luego validar el formato de los datos
+                if (!validarFormatoTexto()) {
+                        return;
+                }
+
+                // variables auxiliares para pasar como parametros al metodo guardar(), pero lo
                 // puedo hacer directo
                 // Datos de la mascota (aplicando validaciones de formato)
-                String nombreMasco = convertirATitulo(txtNombre.getText());
-                String raza = convertirAOracion(txtRaza.getText());
-                String color = convertirAOracion(txtColor.getText());
+                String nombreMasco = UtilidadesIGU.convertirATitulo(txtNombre.getText());
+                String raza = UtilidadesIGU.convertirAOracion(txtRaza.getText());
+                String color = UtilidadesIGU.convertirAOracion(txtColor.getText());
                 String observaciones = txtObservaciones.getText().trim();
                 String alergico = (String) cmbAlergico.getSelectedItem();
                 String atEsp = (String) cmbAtEsp.getSelectedItem();
 
                 // Datos del dueño (aplicando validaciones de formato)
-                String nombreDuenio = convertirATitulo(txtNomDuenio.getText());
+                String nombreDuenio = UtilidadesIGU.convertirATitulo(txtNomDuenio.getText());
                 String celDuenio = txtCelDuenio.getText().trim();
 
                 // Verificar si cambió la información del dueño
@@ -463,13 +463,15 @@ public class ModificarDatos extends javax.swing.JFrame {
                                         control.modificarMascotaConNuevoDuenio(masco, nombreMasco, raza, color,
                                                         observaciones, alergico, atEsp,
                                                         nombreDuenio, celDuenio);
-                                        mostrarMensaje("Mascota actualizada con nuevo dueño", "Info",
+                                        UtilidadesIGU.mostrarMensaje(this, "Mascota actualizada con nuevo dueño",
+                                                        "Info",
                                                         "Edición Correcta");
                                 } else {
                                         // Modificar el dueño existente (comportamiento original)
                                         control.modificarMascota(masco, nombreMasco, raza, color, observaciones,
                                                         alergico, atEsp, nombreDuenio, celDuenio);
-                                        mostrarMensaje("Mascota y dueño actualizados (todas las mascotas del dueño afectadas)",
+                                        UtilidadesIGU.mostrarMensaje(this,
+                                                        "Mascota y dueño actualizados (todas las mascotas del dueño afectadas)",
                                                         "Info", "Edición Correcta");
                                 }
                         } else {
@@ -478,13 +480,15 @@ public class ModificarDatos extends javax.swing.JFrame {
                                 control.modificarMascotaConNuevoDuenio(masco, nombreMasco, raza, color,
                                                 observaciones, alergico, atEsp,
                                                 nombreDuenio, celDuenio);
-                                mostrarMensaje("Mascota actualizada correctamente", "Info", "Edición Correcta");
+                                UtilidadesIGU.mostrarMensaje(this, "Mascota actualizada correctamente", "Info",
+                                                "Edición Correcta");
                         }
                 } else {
                         // No cambió la información del dueño, solo modificar la mascota
                         control.modificarMascota(masco, nombreMasco, raza, color, observaciones,
                                         alergico, atEsp, nombreDuenio, celDuenio);
-                        mostrarMensaje("Edición realizada correctamente", "Info", "Edición Correcta");
+                        UtilidadesIGU.mostrarMensaje(this, "Edición realizada correctamente", "Info",
+                                        "Edición Correcta");
                 }
 
                 // llamo a la pantalla de ver Datos que va a tener los datos actualizados
@@ -553,56 +557,6 @@ public class ModificarDatos extends javax.swing.JFrame {
                         }
                 }
 
-        }
-
-        public void mostrarMensaje(String mensaje, String tipo, String titulo) {
-                JOptionPane optionPane = new JOptionPane(mensaje);
-                if (tipo.equals("Info")) {
-                        optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                        if (tipo.equals("Error")) {
-                                optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
-                        }
-                }
-                JDialog dialog;
-                dialog = optionPane.createDialog(titulo);
-                dialog.setAlwaysOnTop(true);
-                dialog.setVisible(true);
-        }
-
-        // Métodos para validación y formato de datos
-        private String convertirATitulo(String texto) {
-                if (texto == null || texto.trim().isEmpty()) {
-                        return texto;
-                }
-
-                StringBuilder resultado = new StringBuilder();
-                String[] palabras = texto.trim().toLowerCase().split("\\s+");
-
-                for (int i = 0; i < palabras.length; i++) {
-                        String palabra = palabras[i];
-                        if (!palabra.isEmpty()) {
-                                // Capitalizar primera letra + resto en minúscula
-                                resultado.append(palabra.substring(0, 1).toUpperCase())
-                                                .append(palabra.substring(1));
-
-                                // Agregar espacio entre palabras
-                                if (i < palabras.length - 1) {
-                                        resultado.append(" ");
-                                }
-                        }
-                }
-
-                return resultado.toString();
-        }
-
-        private String convertirAOracion(String texto) {
-                if (texto == null || texto.trim().isEmpty()) {
-                        return texto;
-                }
-
-                String limpio = texto.trim().toLowerCase();
-                return limpio.substring(0, 1).toUpperCase() + limpio.substring(1);
         }
 
         private void configurarAutocompletado() {
@@ -680,57 +634,30 @@ public class ModificarDatos extends javax.swing.JFrame {
                 }
         }
 
-    private boolean validarCamposVacios() {
-         if (txtNombre.getText().trim().isEmpty()) {
-            mostrarMensaje("El campo 'Nombre' no puede estar vacío", "Error", "Campo obligatorio");
-            return false;
-        }
-        if (txtRaza.getText().trim().isEmpty()) {
-            mostrarMensaje("El campo 'Raza' no puede estar vacío", "Error", "Campo obligatorio");
-            return false;
-        }
-        if (txtColor.getText().trim().isEmpty()) {
-            mostrarMensaje("El campo 'Color' no puede estar vacío", "Error", "Campo obligatorio");
-            return false;
-        }
-        if (txtNomDuenio.getText().trim().isEmpty()) {
-            mostrarMensaje("El campo 'Nombre Dueño' no puede estar vacío", "Error", "Campo obligatorio");
-            return false;
-        }
-        if (txtCelDuenio.getText().trim().isEmpty()) {
-            mostrarMensaje("El campo 'Celular Dueño' no puede estar vacío", "Error", "Campo obligatorio");
-            return false;
-        }
-        return true;
-    }
-    
+        private boolean validarCamposVacios() {
+                javax.swing.JTextField[] camposObligatorios = {
+                                txtNombre, txtRaza, txtColor, txtNomDuenio, txtCelDuenio
+                };
+                String[] nombresCampos = {
+                                "Nombre", "Raza", "Color", "Nombre Dueño", "Celular Dueño"
+                };
 
-    private boolean validarFormatoTexto() {
-        // Validar que nombre, raza, color y nombre dueño solo contengan letras y
-        // espacios
-        if (!txtNombre.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
-            mostrarMensaje("El campo 'Nombre' solo puede contener letras", "Error", "Formato incorrecto");
-            return false;
-        }
-        if (!txtRaza.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
-            mostrarMensaje("El campo 'Raza' solo puede contener letras", "Error", "Formato incorrecto");
-            return false;
-        }
-        if (!txtColor.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
-            mostrarMensaje("El campo 'Color' solo puede contener letras", "Error", "Formato incorrecto");
-            return false;
-        }
-        if (!txtNomDuenio.getText().trim().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
-            mostrarMensaje("El campo 'Nombre Dueño' solo puede contener letras", "Error", "Formato incorrecto");
-            return false;
+                return UtilidadesIGU.validarCamposObligatorios(this, camposObligatorios, nombresCampos);
         }
 
-        // Validar que celular solo contenga números
-        if (!txtCelDuenio.getText().trim().matches("^[0-9]+$")) {
-            mostrarMensaje("El campo 'Celular Dueño' solo puede contener números", "Error", "Formato incorrecto");
-            return false;
-        }
+        private boolean validarFormatoTexto() {
+                javax.swing.JTextField[] camposTexto = {
+                                txtNombre, txtRaza, txtColor, txtNomDuenio
+                };
+                String[] nombresCamposTexto = {
+                                "Nombre", "Raza", "Color", "Nombre Dueño"
+                };
 
-        return true;
-    }
+                if (!UtilidadesIGU.validarFormatoTexto(this, camposTexto, nombresCamposTexto)) {
+                        return false;
+                }
+
+                // Validar formato numérico para el celular
+                return UtilidadesIGU.validarFormatoNumerico(this, txtCelDuenio, "Celular Dueño");
+        }
 }
