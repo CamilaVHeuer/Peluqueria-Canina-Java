@@ -13,7 +13,7 @@ import javax.swing.JTextField;
  * mostrar mensajes y formatear texto de manera consistente en toda la
  * aplicación.
  * 
- * @author Pablo Szuban
+ * @author Camila Villalba Heuer
  * @since 1.0
  */
 public class UtilidadesIGU {
