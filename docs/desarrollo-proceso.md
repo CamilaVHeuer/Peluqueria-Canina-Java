@@ -707,6 +707,6 @@ btnGuardar → validar() → detectarCambios() → analizarImpacto() →
 
 ---
 
-**📝 Autor**: Pablo Szuban  
+**📝 Autor**: Camila Villalba Heuer 
 **📅 Fecha**: Noviembre 2024  
 **🎯 Propósito**: Documentación del proceso de desarrollo para comprensión y referencia futura
